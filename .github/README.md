@@ -10,5 +10,5 @@
 
 ## Gameplay demonstration
 
-![Gameplay demonstration](./gameplay_demonstration.gif)
+![Gameplay demonstration](./images/gameplay_demonstration.gif)
 
