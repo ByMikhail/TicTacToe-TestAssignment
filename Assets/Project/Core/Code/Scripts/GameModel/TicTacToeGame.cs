@@ -1,4 +1,5 @@
 ﻿using System;
+using TicTacToe.Core.GameModel.GameResults;
 
 namespace TicTacToe.Core.GameModel
 {
@@ -6,13 +7,14 @@ namespace TicTacToe.Core.GameModel
     {
         public int GridRowsCount => _gridMarks.GetLength(1);
         public int GridColumnsCount => _gridMarks.GetLength(0);
+        public Player CurrentPlayer => _currentPlayer;
         public bool GridHasAvailableCells => _marksCount < _gridMarks.Length;
         public bool IsCompleted { get; private set; }
-        public GameResult Result { get; private set; }
+        public IGameResult Result { get; private set; }
 
         public event Action<GridCell> OnMarkPlaced;
         public event Action<Player> OnPlayerSwitched;
-        public event Action<GameResult> OnCompleted;
+        public event Action<IGameResult> OnCompleted;
 
         private Player?[,] _gridMarks;
         private int _marksCount;
@@ -34,8 +36,8 @@ namespace TicTacToe.Core.GameModel
             _winningMatches = new[]
             {
                 new[] { new GridCell(0, 0), new GridCell(1, 0), new GridCell(2, 0) },
-                new[] { new GridCell(0, 0), new GridCell(1, 0), new GridCell(2, 0) },
                 new[] { new GridCell(0, 1), new GridCell(1, 1), new GridCell(2, 1) },
+                new[] { new GridCell(0, 2), new GridCell(1, 2), new GridCell(2, 2) },
                 new[] { new GridCell(0, 0), new GridCell(0, 1), new GridCell(0, 2) },
                 new[] { new GridCell(1, 0), new GridCell(1, 1), new GridCell(1, 2) },
                 new[] { new GridCell(2, 0), new GridCell(2, 1), new GridCell(2, 2) },
@@ -81,7 +83,7 @@ namespace TicTacToe.Core.GameModel
 
         #region Private Methods
 
-        private void Complete(GameResult gameResult)
+        private void Complete(IGameResult gameResult)
         {
             IsCompleted = true;
             Result = gameResult;
@@ -90,19 +92,20 @@ namespace TicTacToe.Core.GameModel
 
         private void CheckCompletionState()
         {
-            if (WinnerCanBeDetermined(out Player winner))
+            if (WinnerCanBeDetermined(out Player winner, out GridCell[] winningMatch))
             {
-                Complete(GameResult.WinLose(winner));
+                Complete(new WinLose(winner, winningMatch));
             }
             else if (!GridHasAvailableCells)
             {
-                Complete(GameResult.Tie());
+                Complete(new Tie());
             }
         }
 
-        private bool WinnerCanBeDetermined(out Player winner)
+        private bool WinnerCanBeDetermined(out Player winner, out GridCell[] match)
         {
             winner = Player.X;
+            match = null;
 
             foreach (var winningMatch in _winningMatches)
             {
@@ -111,6 +114,8 @@ namespace TicTacToe.Core.GameModel
                 if (CellContainsMark(firstCellInMatch) && CellMarksMatch(winningMatch))
                 {
                     winner = WhoseMarkIsInCell(firstCellInMatch);
+                    match = winningMatch;
+
                     return true;
                 }
             }

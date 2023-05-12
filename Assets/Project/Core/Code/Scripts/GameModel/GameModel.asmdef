@@ -1,6 +1,6 @@
 {
     "name": "TicTacToe.Core.GameModel",
-    "rootNamespace": "",
+    "rootNamespace": "TicTacToe.Core.GameModel",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
