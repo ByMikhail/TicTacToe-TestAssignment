@@ -1,0 +1,19 @@
+{
+    "name": "TicTacToe.GUI",
+    "rootNamespace": "TicTacToe.GUI",
+    "references": [
+        "GUID:f6e3bbee39563be41b654741f633b258",
+        "GUID:098d87f4e892f4749a185c0f4c3f66a0",
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
